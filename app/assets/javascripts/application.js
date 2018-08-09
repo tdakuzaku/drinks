@@ -17,7 +17,8 @@
 //= require_tree .
 
 function ready(event) {
-  $('input[type=radio][name=searchRadio]').change(function() {
+  $('input[type=radio][name=searchRadio]')
+    .change(function () {
     if (this.value === 'simple') {
       $('.simple-form').show();
       $('.advanced-form').hide();
@@ -28,31 +29,26 @@ function ready(event) {
     }
   });
 
-  var RGBChange = function() {
-    $('#RGB').css('background', 'rgb('+a.getValue()+','+g.getValue()+','+b.getValue()+')')
+  var RGBChange = function () {
+    let red = percentToRGB(r.getValue());
+    let green = percentToRGB(g.getValue());
+    let blue = tempToRGB(b.getValue());
+    $('#RGB').css('background', 'rgb(' + red + ',' + green + ',' + blue + ')')
+    function percentToRGB(value) {
+      return Math.ceil(value * (255/100))
+    }
+    function tempToRGB(temp) {
+      return Math.ceil(temp * (255/4))
+    }
   };
   
-  var a = $('#abv').slider({
-      formatter: function(value) {
-        return 'Alcohol by volume: ' + value + '%';
-      }
-    })
+  var r = $('#abv').slider()
     .on('slide', RGBChange)
     .data('slider');
-
-  var g = $('#ibu').slider({
-      formatter: function(value) {
-        return 'International Bitterness units: ' + value;
-      }
-    })
+  var g = $('#ibu').slider()
     .on('slide', RGBChange)
     .data('slider');
-  
-  var b = $('#temp').slider({
-      formatter: function(value) {
-        return 'Temperature: ' + value;
-      }
-    })
+  var b = $('#temp').slider()
     .on('slide', RGBChange)
     .data('slider');
 }
