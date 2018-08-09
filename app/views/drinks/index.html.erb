@@ -18,7 +18,7 @@
 
     <div class="simple-form">
       <div class="simple-form__input">
-        <input v-model="search" class="form-control form-control-lg" type="text" placeholder="Try a Martini..">
+        <input v-model="search" class="form-control form-control-lg" @keyup.enter="searchDrinks" placeholder="Try a Martini..">
       </div>
       <div class="simple-form__btn">
         <button type="submit" class="btn btn-outline-primary btn-lg" @click="searchDrinks">Search</button>
@@ -26,7 +26,36 @@
     </div>
 
     <div class="advanced-form" style="display:none;">
-      User inputs to search a collection of drinks based on given recommendations.
+      <div class="row">
+        <div class="col-3">
+          <span>ABV</span>
+        </div>
+        <div class="col-9">
+          <input data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="20" data-slider-id="RC" id="abv"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <span>IBU</span>
+        </div>
+        <div class="col-9">
+          <input data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="20" data-slider-id="GC" id="ibu"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <span>Temp</span>
+        </div>
+        <div class="col-9">
+          <input value="" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-id="BC" id="temp"/>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-12">
+          <div id="RGB"></div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -103,3 +103,41 @@
 .drink-card__body {
   margin-left: 30px;
 }
+
+.form-check-input {
+  margin-left: 0;
+}
+
+.slider.slider-horizontal {
+  width: 100%;
+}
+
+.advanced-form {
+  width: 320px;
+}
+
+#RGB {
+	height: 20px;
+	background: rgb(128, 128, 128);
+}
+#RC .slider-selection {
+	background: #FF8282;
+}
+#RC .slider-handle {
+	background: red;
+}
+#GC .slider-selection {
+	background: #428041;
+}
+#GC .slider-handle {
+	background: green;
+}
+#BC .slider-selection {
+	background: #8283FF;
+}
+#BC .slider-handle {
+	border-bottom-color: blue;
+}
+#R, #G, #B {
+	width: 300px;
+}

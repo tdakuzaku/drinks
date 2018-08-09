@@ -23,11 +23,38 @@ function ready(event) {
       $('.advanced-form').hide();
     }
     else if (this.value === 'advanced') {
-      console.log('aqui')
       $('.simple-form').hide();
       $('.advanced-form').show();
     }
   });
+
+  var RGBChange = function() {
+    $('#RGB').css('background', 'rgb('+a.getValue()+','+g.getValue()+','+b.getValue()+')')
+  };
+  
+  var a = $('#abv').slider({
+      formatter: function(value) {
+        return 'Alcohol by volume: ' + value + '%';
+      }
+    })
+    .on('slide', RGBChange)
+    .data('slider');
+
+  var g = $('#ibu').slider({
+      formatter: function(value) {
+        return 'International Bitterness units: ' + value;
+      }
+    })
+    .on('slide', RGBChange)
+    .data('slider');
+  
+  var b = $('#temp').slider({
+      formatter: function(value) {
+        return 'Temperature: ' + value;
+      }
+    })
+    .on('slide', RGBChange)
+    .data('slider');
 }
 
 $(document).on('turbolinks:load', ready);
