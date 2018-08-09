@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   namespace 'api' do
   	namespace 'v1' do
   		resources :drinks, only: [:index, :show]
-  		resources :recommendations, only: [:index]
   	end
   end
 
   root to: 'drinks#index'
+
+  post 'api/v1/drinks/recommend/', :to => 'api/v1/drinks#recommend'
 
   resources :home, only: %i[index]
 end

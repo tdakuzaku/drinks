@@ -116,9 +116,14 @@
   width: 320px;
 }
 
+.btn-outline-secondary:hover {
+  color: #525252;
+}
+
 #RGB {
-	height: 20px;
-	background: rgb(128, 128, 128);
+  background: #FFF;
+  width: 100%;
+  cursor: help;
 }
 #RC .slider-selection {
 	background: #FF8282;

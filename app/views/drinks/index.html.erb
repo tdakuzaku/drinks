@@ -26,36 +26,38 @@
     </div>
 
     <div class="advanced-form" style="display:none;">
-      <div class="row">
-        <div class="col-3">
-          <span>ABV</span>
+      <form method="POST" v-on:submit.prevent="recommendDrinks">
+        <div class="row">
+          <div class="col-3">
+            <span>ABV</span>
+          </div>
+          <div class="col-9">
+            <input class="slider" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="20" data-slider-id="RC" id="abv"/>
+          </div>
         </div>
-        <div class="col-9">
-          <input class="slider" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="20" data-slider-id="RC" id="abv"/>
+        <div class="row">
+          <div class="col-3">
+            <span>IBU</span>
+          </div>
+          <div class="col-9">
+            <input class="slider" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="35" data-slider-id="GC" id="ibu"/>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-3">
-          <span>IBU</span>
+        <div class="row">
+          <div class="col-3">
+            <span>Temp</span>
+          </div>
+          <div class="col-9">
+            <input value="" class="slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-id="BC" id="temp"/>
+          </div>
         </div>
-        <div class="col-9">
-          <input class="slider" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="35" data-slider-id="GC" id="ibu"/>
+        <hr>
+        <div class="row">
+          <div class="col-12">
+            <button id="RGB" type="submit" class="btn btn-outline-secondary btn-lg">What should I drink?</button>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-3">
-          <span>Temp</span>
-        </div>
-        <div class="col-9">
-          <input  class="slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-id="BC" id="temp"/>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-12">
-          <div id="RGB"></div>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 
@@ -64,6 +66,9 @@
       <img :src="drink.image_url" class='drink-card__img' />
       <div class="drink-card__body">
         <h2>{{ drink.name }}</h2>
+        <p>ABV: {{ drink.alcohol_level }}</p>
+        <p>IBU: {{ drink.ibu }}</p>
+        <p>Temp: {{ drink.temperature }}</p>
         <p>{{ drink.description }}</p>
       </div>
     </div>
@@ -89,10 +94,15 @@
           this.drinks = res.data
         })
       },
-      getRecommendation() {
-        // $.get( "/api/v1/drinks", ( res ) => {
-        //   this.drinks = res.data
-        // })
+      recommendDrinks() {
+        let data = {
+          abv: $("#abv").val(),
+          ibu: $("#ibu").val(),
+          temp: $("#temp").val()
+        }
+        $.post( "/api/v1/drinks/recommend/", data, ( res ) => {
+          this.drinks = res.data
+        })
       },
       searchDrinks() {
         let url = '/api/v1/drinks/' + encodeURI(this.search)
