@@ -17,13 +17,6 @@
 //= require_tree .
 
 function ready(event) {
-  var app = new Vue({
-    el: '#app',
-    data: {
-      message: 'Hello Vue!'
-    }
-  });
-
   $('input[type=radio][name=searchRadio]').change(function() {
     if (this.value === 'simple') {
       $('.simple-form').show();

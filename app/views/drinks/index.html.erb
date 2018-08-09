@@ -3,7 +3,7 @@
     <%= image_tag 'cocktail-white.svg', class: 'icon' %>
     <div class="header__title">The drinks searcher</div>
   </div>
-
+  {{ message }}
   <div class="searcher">
     <div class="searcher__radio">
       <div class="form-check">
@@ -44,3 +44,25 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data () {
+      return {
+        message: 'Hello Vue!',
+        drinks: []
+      }
+    },
+    mounted () {
+      this.getDrinks()
+    },
+    methods: {
+      getDrinks() {
+        $.get( "/api/v1/drinks", ( res ) => {
+          this.drinks = res.data
+        })
+      }
+    }
+  })
+</script>
