@@ -33,16 +33,15 @@
   </div>
 
   <div class="drinks-list">
-    <% @drinks.each do |drink| %>
-      <div class="card drink-card">
-        <%= image_tag drink.image_url, class: 'drink-card__img' %>
-        <div class="drink-card__body">
-          <h2><%= drink.name %></h2>
-          <p><%= drink.description %></p>
-        </div>
+    <div class="card drink-card" v-for="(drink, index) in drinks" :key='index'>
+      <img :src="drink.image_url" class='drink-card__img' />
+      <div class="drink-card__body">
+        <h2>{{ drink.name }}</h2>
+        <p>{{ drink.description }}</p>
       </div>
-    <% end %>
+    </div>
   </div>
+
 </div>
 
 <script>
