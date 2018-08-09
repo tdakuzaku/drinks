@@ -3,7 +3,7 @@
     <%= image_tag 'cocktail-white.svg', class: 'icon' %>
     <div class="header__title">The drinks searcher</div>
   </div>
-  {{ message }}
+
   <div class="searcher">
     <div class="searcher__radio">
       <div class="form-check">
@@ -16,20 +16,18 @@
       </div>
     </div>
 
-    <%= form_tag do %>
-      <div class="simple-form">
-        <div class="simple-form__input">
-          <input class="form-control form-control-lg" type="text" placeholder="Try a Martini..">
-        </div>
-        <div class="simple-form__btn">
-          <button type="submit" class="btn btn-outline-primary btn-lg">Search</button>
-        </div>
+    <div class="simple-form">
+      <div class="simple-form__input">
+        <input v-model="search" class="form-control form-control-lg" type="text" placeholder="Try a Martini..">
       </div>
+      <div class="simple-form__btn">
+        <button type="submit" class="btn btn-outline-primary btn-lg" @click="searchDrinks">Search</button>
+      </div>
+    </div>
 
-      <div class="advanced-form" style="display:none;">
-        User inputs to search a collection of drinks based on given recommendations.
-      </div>
-    <% end %>
+    <div class="advanced-form" style="display:none;">
+      User inputs to search a collection of drinks based on given recommendations.
+    </div>
   </div>
 
   <div class="drinks-list">
@@ -49,7 +47,7 @@
     el: '#app',
     data () {
       return {
-        message: 'Hello Vue!',
+        search: '',
         drinks: []
       }
     },
@@ -59,6 +57,17 @@
     methods: {
       getDrinks() {
         $.get( "/api/v1/drinks", ( res ) => {
+          this.drinks = res.data
+        })
+      },
+      getRecommendation() {
+        // $.get( "/api/v1/drinks", ( res ) => {
+        //   this.drinks = res.data
+        // })
+      },
+      searchDrinks() {
+        let url = '/api/v1/drinks/' + encodeURI(this.search)
+        $.get( url, ( res ) => {
           this.drinks = res.data
         })
       }
