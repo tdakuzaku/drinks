@@ -43,11 +43,11 @@ module Api
 				drinks = Drink.where("temperature = '#{temp}'").to_a
 				# Calculates the difference between the target score
 				drinks.map! {|drink|
-					drink.rating_avg = target - drink.rating_avg
+					drink.rating_avg = (target - drink.rating_avg).abs
 					drink
 				}
 				result = drinks.sort_by { |drink| drink.rating_avg }
-				render json: {status: 'SUCCESS', data: result.reverse}, status: :ok
+				render json: {status: 'SUCCESS', data: result[0,3]}, status: :ok
 			end
 		end
 	end
