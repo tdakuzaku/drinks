@@ -76,9 +76,9 @@
       <div class="col-12">
         <nav>
           <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item" v-for="page in pages">
+              <span class="page-link" v-bind:class="{ current: page == pagination.current }" @click="changePage(page)">{{ page }}</span>
+            </li>
           </ul>
         </nav>
       </div>
@@ -92,28 +92,45 @@
     data () {
       return {
         search: '',
-        total: 0,
-        drinks: []
+        drinks: [],
+        pages: 0,
+        pagination: {
+          size: 5,
+          current: 1,
+        }
       }
     },
     mounted () {
       this.getTotalDrinks()
     },
     methods: {
-      getTotalDrinks() {
+      getTotalDrinks () {
         $.get( "/api/v1/drinks/total/", ( res ) => {
-          this.total = res.data
+          this.pages = Math.ceil(res.data / this.pagination.size)
         })
         .done(() => {
           this.getDrinks()
         })
       },
-      getDrinks() {
-        $.get( "/api/v1/drinks/", ( res ) => {
+      getDrinks () {
+        $.get( "/api/v1/drinks/", this.pagination, ( res ) => {
           this.drinks = res.data
         })
       },
-      recommendDrinks() {
+      changePage (page) {
+        this.pagination.current = page
+        this.getDrinks()
+        // document.body.scrollTop = 0; // For Safari
+        // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      },
+      searchDrinks () {
+        let params = this.pagination
+        params.search = encodeURI(this.search)
+        $.get( '/api/v1/drinks/search/', params, ( res ) => {
+          this.drinks = res.data
+        })
+      },
+      recommendDrinks () {
         let data = {
           abv: $("#abv").val(),
           ibu: $("#ibu").val(),
@@ -123,12 +140,6 @@
           this.drinks = res.data
         })
       },
-      searchDrinks() {
-        let url = '/api/v1/drinks/search/' + encodeURI(this.search)
-        $.get( url, ( res ) => {
-          this.drinks = res.data
-        })
-      }
     }
   })
 </script>
