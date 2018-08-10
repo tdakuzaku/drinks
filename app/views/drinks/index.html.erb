@@ -67,7 +67,7 @@
       <div class="drink-card__body">
         <h2>{{ drink.name }}</h2>
         <section v-if="recommend">
-          <p>Score: {{ drink.rating_avg }}</p>
+          <p>Recomend Score: {{ 100 - drink.rating_avg }}</p>
           <p>ABV: {{ drink.alcohol_level }}</p>
           <p>IBU: {{ drink.ibu }}</p>
           <p>Temp: {{ drink.temperature }}</p>
