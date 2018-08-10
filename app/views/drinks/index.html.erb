@@ -95,7 +95,7 @@
         drinks: [],
         pages: 0,
         pagination: {
-          size: 5,
+          size: 10,
           current: 1,
         }
       }
@@ -121,8 +121,6 @@
       changePage (page) {
         this.pagination.current = page
         this.getDrinks()
-        // document.body.scrollTop = 0; // For Safari
-        // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       },
       searchDrinks () {
         let params = { search: this.search }

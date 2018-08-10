@@ -8,31 +8,32 @@ module Api
 					page = page - 1
 				end
 				drinks = Drink.all
-											.order(:created_at)
+											.order(name: :asc)
 											.limit(pageSize)
 											.offset(page * pageSize)
 				render json: {status: 'SUCCESS', data: drinks}, status: :ok
 			end
+
 			def total
-				# SQL Injection!!!
-				search =  params[:search] + '%'
-				drinks = Drink.where("lower(name) like ?", search.downcase).count
+				search = params[:search].downcase
+				drinks = Drink.where("lower(name) like '#{search}%'").count
 				render json: {status: 'SUCCESS', data: drinks}, status: :ok
 			end
+
 			def search
 				page = params[:current].to_i
 				pageSize = params[:size].to_i
 				if (page > 0)
 					page = page - 1
 				end
-				# SQL Injection!!!
-				search =  params[:search] + '%'
-				drinks = Drink.where("lower(name) like ?", search.downcase)
+				search =  params[:search].downcase
+				drinks = Drink.where("lower(name) like '#{search}%'")
 											.order(name: :asc)
 											.limit(pageSize)
 											.offset(page * pageSize)
 				render json: {status: 'SUCCESS', data: drinks}, status: :ok
 			end
+
 			def recommend
 				margin = 10
 				minAbv = (params[:abv].to_i - margin).to_s
