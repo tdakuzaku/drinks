@@ -12,4 +12,25 @@ class Drink < ApplicationRecord
     cold
     extra_cold
   ]
+
+  # attr_accessor :recommend_score
+  after_find :recalculate_score
+  
+  def recalculate_score
+    self.rating_avg = self.class.calculate_score(self.alcohol_level, self.ibu)
+  end
+
+  def self.calculate_score(abv, ibu)
+    wAbv = 1.0
+    wIbu = 1.0
+    diff = (abv - ibu)
+    # Adds proportional weight to ABV or IBU
+    if (diff > 0)
+      wAbv = 1 + (diff / 100.0)
+    else
+      wIbu = 1 + (diff.abs / 100.0)
+    end
+    score = (abv * wAbv + ibu * wIbu) / 2
+    return score / 5
+  end
 end

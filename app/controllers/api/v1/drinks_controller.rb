@@ -35,16 +35,19 @@ module Api
 			end
 
 			def recommend
-				margin = 10
-				minAbv = (params[:abv].to_i - margin).to_s
-				minIbu = (params[:ibu].to_i - margin).to_s
-				maxAbv = (params[:abv].to_i + margin).to_s
-				maxIbu = (params[:ibu].to_i + margin).to_s
-				query = "((alcohol_level >" + minAbv + " AND alcohol_level <= " + maxAbv + ")"
-				query << " OR (ibu >" + minIbu + " AND ibu <= " + maxIbu + "))"
-				query << " AND temperature =" + params[:temp]
-				drinks = Drink.where(query)
-				render json: {status: 'SUCCESS', message:'Resultado da busca', data:drinks}, status: :ok
+				abv = params[:abv].to_i
+				ibu = params[:ibu].to_i
+				temp = params[:temp]
+				target = Drink.calculate_score(abv, ibu)
+
+				drinks = Drink.where("temperature = '#{temp}'").to_a
+				# Calculates the difference between the target score
+				drinks.map! {|drink|
+					drink.rating_avg = target - drink.rating_avg
+					drink
+				}
+				result = drinks.sort_by { |drink| drink.rating_avg }
+				render json: {status: 'SUCCESS', data: result.reverse}, status: :ok
 			end
 		end
 	end

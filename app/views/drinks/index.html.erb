@@ -66,13 +66,16 @@
       <img :src="drink.image_url" class='drink-card__img' />
       <div class="drink-card__body">
         <h2>{{ drink.name }}</h2>
-        <p>ABV: {{ drink.alcohol_level }}</p>
-        <p>IBU: {{ drink.ibu }}</p>
-        <p>Temp: {{ drink.temperature }}</p>
+        <section v-if="recommend">
+          <p>Score: {{ drink.rating_avg }}</p>
+          <p>ABV: {{ drink.alcohol_level }}</p>
+          <p>IBU: {{ drink.ibu }}</p>
+          <p>Temp: {{ drink.temperature }}</p>
+        </section>
         <p>{{ drink.description }}</p>
       </div>
     </div>
-    <div class="row">
+    <div v-if="pages > 0" class="row">
       <div class="col-12">
         <nav>
           <ul class="pagination">
@@ -92,6 +95,7 @@
     data () {
       return {
         search: '',
+        recommend: false,
         drinks: [],
         pages: 0,
         pagination: {
@@ -123,6 +127,7 @@
         this.getDrinks()
       },
       searchDrinks () {
+        this.recommend = false
         let params = { search: this.search }
         $.get( "/api/v1/drinks/total/", params, ( res ) => {
           this.setPages(res.data)
@@ -136,12 +141,14 @@
         })
       },
       recommendDrinks () {
+        this.recommend = true
         let data = {
           abv: $("#abv").val(),
           ibu: $("#ibu").val(),
           temp: $("#temp").val()
         }
         $.post( "/api/v1/drinks/recommend/", data, ( res ) => {
+          this.pages = 0
           this.drinks = res.data
         })
       },
