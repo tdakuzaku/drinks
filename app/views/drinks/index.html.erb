@@ -72,8 +72,18 @@
         <p>{{ drink.description }}</p>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   </div>
-
 </div>
 
 <script>
@@ -82,15 +92,24 @@
     data () {
       return {
         search: '',
+        total: 0,
         drinks: []
       }
     },
     mounted () {
-      this.getDrinks()
+      this.getTotalDrinks()
     },
     methods: {
+      getTotalDrinks() {
+        $.get( "/api/v1/drinks/total/", ( res ) => {
+          this.total = res.data
+        })
+        .done(() => {
+          this.getDrinks()
+        })
+      },
       getDrinks() {
-        $.get( "/api/v1/drinks", ( res ) => {
+        $.get( "/api/v1/drinks/", ( res ) => {
           this.drinks = res.data
         })
       },
@@ -105,7 +124,7 @@
         })
       },
       searchDrinks() {
-        let url = '/api/v1/drinks/' + encodeURI(this.search)
+        let url = '/api/v1/drinks/search/' + encodeURI(this.search)
         $.get( url, ( res ) => {
           this.drinks = res.data
         })
