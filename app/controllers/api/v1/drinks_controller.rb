@@ -14,7 +14,10 @@ module Api
 				render json: {status: 'SUCCESS', data: drinks}, status: :ok
 			end
 			def total
-				render json: {status: 'SUCCESS', data: Drink.count}, status: :ok
+				# SQL Injection!!!
+				search =  params[:search] + '%'
+				drinks = Drink.where("lower(name) like ?", search.downcase).count
+				render json: {status: 'SUCCESS', data: drinks}, status: :ok
 			end
 			def search
 				page = params[:current].to_i

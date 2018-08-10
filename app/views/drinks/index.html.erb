@@ -105,8 +105,9 @@
     },
     methods: {
       getTotalDrinks () {
-        $.get( "/api/v1/drinks/total/", ( res ) => {
-          this.pages = Math.ceil(res.data / this.pagination.size)
+        let params = { search: this.search }
+        $.get( "/api/v1/drinks/total/", params, ( res ) => {
+          this.setPages(res.data)
         })
         .done(() => {
           this.getDrinks()
@@ -124,10 +125,16 @@
         // document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       },
       searchDrinks () {
-        let params = this.pagination
-        params.search = encodeURI(this.search)
-        $.get( '/api/v1/drinks/search/', params, ( res ) => {
-          this.drinks = res.data
+        let params = { search: this.search }
+        $.get( "/api/v1/drinks/total/", params, ( res ) => {
+          this.setPages(res.data)
+        })
+        .done(() => {
+          params = this.pagination
+          params.search = encodeURI(this.search)
+          $.get( '/api/v1/drinks/search/', params, ( res ) => {
+            this.drinks = res.data
+          })
         })
       },
       recommendDrinks () {
@@ -140,6 +147,9 @@
           this.drinks = res.data
         })
       },
+      setPages (total) {
+        this.pages = Math.ceil(total / this.pagination.size)
+      }
     }
   })
 </script>
